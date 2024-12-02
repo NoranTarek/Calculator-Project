@@ -11,12 +11,12 @@
 
 #define NUM_SIZE 4
 
-void CAL_u32SUM(u8 num1[],u8 num2[],u8 n, u8 m);
+void CAL_u32SUM(u8 num1,u8 num2,u8 sign1,u8 sign2);
 
-void CAL_u32SUB(u8 num1[],u8 num2[],u8 n, u8 m);
+void CAL_u32SUB(u8 num1,u8 num2,u8 sign1,u8 sign2);
 
-void CAL_u32MUL(u8 num1[],u8 num2[],u8 n, u8 m);
+void CAL_u32MUL(u8 num1,u8 num2,u8 sign1,u8 sign2);
 
-void CAL_u32DIV(u8 num1[],u8 num2[],u8 n, u8 m);
+void CAL_u32DIV(u8 num1,u8 num2,u8 sign1,u8 sign2);
 
 #endif /* CAL_H_ */

@@ -23,6 +23,8 @@ int main(void)
 	u8 Local_u8OP2[NUM_SIZE];
 	u8 Local_u8OP;
 	u8 counter1 = 0;
+	u8 Local_u8Sign1 = 0;
+	u8 Local_u8Sign2 = 0;
 	u8 counter2 = 0;
 	u8 Local_u8Flag = 0;
 	DIO_enuInit();
@@ -43,19 +45,26 @@ int main(void)
 			{
 				counter1 = 0;
 				counter2 = 0;
+				Local_u8Sign1 = 0;
+				Local_u8Sign2 = 0;
 				Local_u8Flag = 0;
 				LCD_enuInit();
 				continue;
 			}
 			if(Local_u8Flag == 0)
 			{
-			if(Local_u8Key == '+' || Local_u8Key == '-' || Local_u8Key == '/' || Local_u8Key == '*')
+			if((Local_u8Key == '+' || Local_u8Key == '-' || Local_u8Key == '/' || Local_u8Key == '*') && (counter1 != 0))
 			{
 				Local_u8OP = Local_u8Key;
 				Local_u8Flag = 1;
 			}
 			else
 			{
+				if(Local_u8Key == '-')
+				{
+					Local_u8Sign1 = 1;
+					continue;
+				}
 				Local_u8OP1[counter1] = Local_u8Key-'0';
 				counter1++;
 			}
@@ -67,28 +76,45 @@ int main(void)
 				}
 				else
 				{
+					if(Local_u8Key == '-')
+					{
+						Local_u8Sign2 = 1;
+						continue;
+					}
 					Local_u8OP2[counter2] = Local_u8Key-'0';
 					counter2++;
 				}
 			}
 			if(Local_u8Flag ==2)
 			{
-					switch(Local_u8OP)
+				u8 Local_u8Num1 = 0,Local_u8Num2 = 0,Local_u8Dec = 1;
+				for(u8 counter = counter1; counter > 0;counter--)
 					{
-						case '+':
-							CAL_u32SUM(Local_u8OP1,Local_u8OP2,counter1,counter2);
-							break;
-						case '-':
-							CAL_u32SUB(Local_u8OP1,Local_u8OP2,counter1,counter2);
-							break;
-						case '*':
-							CAL_u32MUL(Local_u8OP1,Local_u8OP2,counter1,counter2);
-							break;
-						case '/':
-							CAL_u32DIV(Local_u8OP1,Local_u8OP2,counter1,counter2);
-							break;
+						Local_u8Num1 += (Local_u8Dec * Local_u8OP1[counter-1]);
+						Local_u8Dec *= 10;
 					}
-					//Local_u8Flag = 3;
+					Local_u8Dec = 1;
+					for(u8 counter = counter2; counter > 0;counter--)
+					{
+						Local_u8Num2 += (Local_u8Dec * Local_u8OP2[counter-1]);
+						Local_u8Dec *= 10;
+					}
+				switch(Local_u8OP)
+				{
+					case '+':
+						CAL_u32SUM(Local_u8Num1,Local_u8Num2,Local_u8Sign1,Local_u8Sign2);
+						break;
+					case '-':
+						CAL_u32SUB(Local_u8Num1,Local_u8Num2,Local_u8Sign1,Local_u8Sign2);
+						break;
+					case '*':
+						CAL_u32MUL(Local_u8Num1,Local_u8Num2,Local_u8Sign1,Local_u8Sign2);
+						break;
+					case '/':
+						CAL_u32DIV(Local_u8Num1,Local_u8Num2,Local_u8Sign1,Local_u8Sign2);
+						break;
+				}
+				//Local_u8Flag = 3;
 			}
 			/*if(Local_u8Flag == 3)
 			{
